@@ -1,0 +1,15 @@
+---
+title:	VOL.1197
+tags:
+ - 一个
+ - ONE
+date:	2016/01/17 1:41:56
+cover:	http://image.wufazhuce.com/Fjr9zaQl4a5f78ox476qSY8KR4nw
+
+---
+![](http://image.wufazhuce.com/Fjr9zaQl4a5f78ox476qSY8KR4nw)
+---
+
+你讨厌的人我绝不和他做朋友，你说别人坏话我也附和，你分手的男友我见一次打一次。别问为什么。这就是女生之间的友情，我不知道能陪你多久，看你嫁人成家当妈妈。愚笨的我，持之以恒地做这些愚笨的事，为了那句逃课后漫不经心说出“一辈子做朋友”的承诺。by 张晓晗
+ 
+Reprinted from ONE

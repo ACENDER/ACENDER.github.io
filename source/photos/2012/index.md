@@ -8,7 +8,7 @@ tags:
 top_img: http://image.wufazhuce.com/Fud23oVlgQo8XP4JyNQjh8bjWltj
 
 ---
-{% gallery %}
+{ {% gallery %} }
 ![](http://image.wufazhuce.com/Fud23oVlgQo8XP4JyNQjh8bjWltj)
 ![](http://image.wufazhuce.com/FvRNPi2v8WScSvuaJsf19Rxi6LDn)
 ![](http://image.wufazhuce.com/FnLTX5_8QZP3HC1CIX9U1cG578FN)
@@ -94,4 +94,4 @@ top_img: http://image.wufazhuce.com/Fud23oVlgQo8XP4JyNQjh8bjWltj
 ![](http://image.wufazhuce.com/Fqon_Wtsm-_NpfDb5r0UEZGnvIsf)
 ![](http://image.wufazhuce.com/FoWU2UK3T2ZjnOipHivjfUgJj59N)
 ![](http://image.wufazhuce.com/Fp7L1MIqpBJyGRjbvFulSmjnmPB8)
-{% endgallery %}
+{ {% endgallery %} }

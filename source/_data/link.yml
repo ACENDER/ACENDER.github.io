@@ -1,0 +1,18 @@
+class:
+  class_name: 友情链接
+  link_list:
+    1:
+      name: April
+      link: http://wangxiaojie.xn--6qq986b3xl/
+      avatar: https://tvax4.sinaimg.cn/crop.0.0.996.996.180/006DtypAly8g0119ol76xj30ro0roq4d.jpg
+      descr: 白白胖胖 心地善良
+    2:
+      name: YEVPT
+      link: https://yevpt.com
+      avatar: https://i.loli.net/2019/12/11/pHTANBW5oPLlgej.jpg
+      descr: 我喜欢要么极度悲伤要么淡淡温暖。
+    3:
+      name: JerryC
+      link: https://jerryc.me/
+      avatar: https://jerryc.me/image/avatar.png
+      descr: 今日事,今日毕

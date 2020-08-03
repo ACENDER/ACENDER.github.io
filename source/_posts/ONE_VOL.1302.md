@@ -1,0 +1,15 @@
+---
+title:	VOL.1302
+tags:
+ - 一个
+ - ONE
+date:	2016/04/30 1:41:45
+cover:	http://image.wufazhuce.com/FtvdflxbFPcMnluENZH5EccdT7Ls
+
+---
+![](http://image.wufazhuce.com/FtvdflxbFPcMnluENZH5EccdT7Ls)
+---
+
+努力改变不了命运，苦难也不会变成财富，真正能改变命运的是你的状态。同样的粗茶淡饭起早摸黑，有人如饮毒酒也有人奋起直追。你的努力不能决定未来，但可以决定当下你是充满朝气和期望的侠客。你要知道，命运从不是未来的那个结果，而是此时此刻。 by 姬霄
+ 
+Reprinted from ONE

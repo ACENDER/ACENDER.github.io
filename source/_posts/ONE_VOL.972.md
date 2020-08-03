@@ -1,0 +1,15 @@
+---
+title:	VOL.972
+tags:
+ - 一个
+ - ONE
+date:	2015/06/6 1:42:19
+cover:	http://image.wufazhuce.com/Fj-hICRtLKhcg0_UN5XCoxkWUCi5
+
+---
+![](http://image.wufazhuce.com/Fj-hICRtLKhcg0_UN5XCoxkWUCi5)
+---
+
+世间也需要没用的东西，如果一切事物都必须有其意义，会让人喘不过气来。by 是枝裕和
+ 
+Reprinted from ONE

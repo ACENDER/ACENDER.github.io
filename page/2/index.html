@@ -1,0 +1,412 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Acender</title><meta name="description"><meta name="author" content="Acender"><meta name="copyright" content="Acender"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://github.com/page/2/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//ta.qq.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="website"><meta property="og:title" content="Acender"><meta property="og:url" content="https://github.com/page/2/"><meta property="og:site_name" content="Acender"><meta property="og:description"><meta property="og:image" content="https://github.com/img/avatar.png"><meta property="article:published_time" content="2020-12-10T07:28:51.906Z"><meta property="article:modified_time" content="2020-12-10T07:28:51.906Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = '1'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?69bc6dcd5c1d4ed9f296ca024a2db5af";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=1778191552"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '1778191552');
+</script><script src="https://tajs.qq.com/stats?sId=66510289" charset="UTF-8" data-pjax="data-pjax"></script><link rel="stylesheet" href="/STZhongsong,YouYuan"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: false,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"键将本页加入书签"},"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#121212","bgDark":"#121212","position":"bottom-center"},
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isSidebar: false,
+  postUpdate: '2020-12-10 07:28:51'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/footer.css"><meta name="generator" content="Hexo 5.0.0"><link rel="alternate" href="/atom.xml" title="Acender" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">104</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">13</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 书架</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa fa-images"></i><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-coffee"></i><span> 留言</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/index_img.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">Acender</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 书架</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa fa-images"></i><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-coffee"></i><span> 留言</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="site-info"><h1 id="site_title">Acender</h1><div id="site_subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://weibo.com/p/1005056067259311" target="_blank" title=""><i class="fab fa-weibo"></i></a><a class="social-icon" href="https://www.facebook.com/profile.php?id=100016946919604" target="_blank" title=""><i class="fab fa-facebook-f"></i></a><a class="social-icon" href="https://twitter.com/_Acender_" target="_blank" title=""><i class="fab fa-twitter"></i></a><a class="social-icon" href="https://www.instagram.com/_lishisan_/" target="_blank" title=""><i class="fab fa-instagram"></i></a><a class="social-icon" href="https://github.com" target="_blank" title=""><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liqijia1997@gmail.com" target="_blank" title=""><i class="fa fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title=""><i class="fa fa-rss"></i></a></div></div><div id="scroll_down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout_page" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/06/01/Month/ONE_202006/" title="第九十三卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20200601-2836.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十三卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/06/01/Month/ONE_202006/" title="第九十三卷">第九十三卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-06-01T00:00:00.000Z" title="发表于 2020-06-01 00:00:00">2020-06-01</time></span></div><div class="content">Reprinted from ONE
+摄影小时候真傻，居然盼着长大。
+
+摄影家人闲坐，灯火可亲。
+
+摄影打翻了牛奶，哭也没用，因为宇宙间的一切力量都在处心积虑要把牛奶打翻。
+
+摄影人生是一座医院，每个病人都渴望着调换床位。这一位愿意面对着火炉呻吟，那一位认为在窗边会治好他的病。
+
+摄影我只相信我自己，因为无论发生什么事，到最后都只剩下你自己。
+
+插画此时情绪此时天，无事小神仙。
+
+摄影人就是这样的吧。有时会闷闷不乐，有时会钻牛角尖，胡思乱想地感觉自己很悲惨。有时还会觉得自己心情特别好，无所不能，什么事情都能做。这两种心情都会有的。两者出现的概率差不多。时间就是在这样的反反复复当中过去的。
+
+摄影诗意地理解生活，理解我们周围的一切——是我们从童年时代得到的最可贵的礼物。
+
+摄影人生有喜就有悲，开心的时候不放纵，难过的时候就比较轻松，是苦日子所培养出来的智慧。
+
+摄影一点点小事就可以安慰我们，因为一点点小事就可以刺痛我们。
+
+摄影一个人如果人生大半都处于孤独中，那么孤独也就不再能名之为孤独了。那状态说不定反倒是一种独立的、充满自信的、甚至可说是积极向上的乐观生存方式。
+
+摄影年轻时总以为能 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/05/01/Month/ONE_202005/" title="第九十二卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20200501-2805.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十二卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/05/01/Month/ONE_202005/" title="第九十二卷">第九十二卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-05-01T00:00:00.000Z" title="发表于 2020-05-01 00:00:00">2020-05-01</time></span></div><div class="content">Reprinted from ONE
+摄影即使在旁人看来毫无意义，可是自己还是能全心投入，那才是人最幸福的时刻吧。
+
+摄影世界巨大，我以渺小来爱它。时间悠长，我以短暂来爱她。
+
+摄影玫瑰是红的，紫罗兰是蓝的，糖是甜的，你也是。
+
+摄影一个人能使自己成为自己，比什么都重要。
+
+摄影每个人都会有缺陷，就像被上帝咬过的苹果，有的人缺陷比较大，正是因为上帝特别喜欢他的芬芳。
+
+插画交谈如果超过理解的限度可能就是一种破坏，一种炫耀。
+
+摄影人之所以能够感到“幸福”，不是因为生活得舒适，而是因为生活得有希望。
+
+摄影对爱情的渴望，对知识的追求，对人类苦难不可遏制的同情心，这三种纯洁但无比强烈的激情支配着我的一生。
+
+摄影有时间绝望的话，还不如吃点好吃的然后睡个好觉。
+
+摄影不要怕死，也不要怕活着。不要怕爱，也不要怕忘记。
+
+摄影好好忍耐，不要沮丧。你想，如果春天要来，大地就使它一点点地完成。
+
+摄影我恨自己别无选择，只能冒险爱你。
+
+摄影这个世界里，虽然没有最美好的相遇，却应该有为了相遇或者重逢，所做的最美好的努力。
+
+摄影人的一生，除了要面对无常带来的跌宕，还有贯穿在其中的平淡和琐碎。
+
+插画姗 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/04/01/Month/ONE_202004/" title="第九十一卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20200401-2774.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十一卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/01/Month/ONE_202004/" title="第九十一卷">第九十一卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-04-01T00:00:00.000Z" title="发表于 2020-04-01 00:00:00">2020-04-01</time></span></div><div class="content">Reprinted from ONE
+插画所谓成熟，就是明明该哭该闹，却不言不语地微笑。
+
+摄影我疯狂收集每一个快乐的瞬间，用他们回击每一个糟糕的日子。
+
+摄影获得幸福的秘密，便是与时间坦然相处。
+
+摄影一个人的生命，我以为，是一半儿活在朋友中的。
+
+插画20岁有20岁的经济模式，25岁有25岁的，不必试图去跨越它。16岁的女孩没必要因为没有LV或者迪奥的包而焦虑。现在很多年轻人，有跨越他年龄段的欲望。
+
+摄影如果我们一同被人梦见，那便是我们的相逢。
+
+插画低调是为了生活在自己的世界里，高调是为了生活在别人的世界里。
+
+摄影你去爬山被告知的第一件事，就是别去看顶峰。而要专注于在爬的路，一步一个脚印地，耐心攀登，如果你不断看山顶，就会泄气。
+
+摄影让别人快乐，叫做情商；让自己快乐，那才是人生。
+
+摄影我的梦想还像小时候一样遥远，唯一不同的是我已经不打算实现它了。
+
+插画一星陨落，黯淡不了星空灿烂；一花凋零，荒芜不了整个春天。
+
+插画当你犹豫要不要去做一件事的时候，其实你内心已经有了选择，只是你还没有充足的理由去说服自己。
+
+摄影日出东海落西山，愁也一天，喜也一天。遇事不钻牛角尖，人也舒坦 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/03/01/Month/ONE_202003/" title="第九十卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20200301-2743.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/03/01/Month/ONE_202003/" title="第九十卷">第九十卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-03-01T00:00:00.000Z" title="发表于 2020-03-01 00:00:00">2020-03-01</time></span></div><div class="content">Reprinted from ONE
+摄影对那些不成熟的人来说，他们永远都可以找到一些借口,以掩饰他们自身的某些缺点或不幸。
+
+摄影情不知所起，一往而深。
+
+摄影生活，就是昂首前瞻。
+
+摄影浅水是喧哗的，深水是沉默的。
+
+摄影你总是喜欢把事情拖到第二天，你不能再这么拖了，因为有一天，你会有很多事要做，你的余生都不够你用。
+
+摄影一辈子很短，如白驹过隙，转瞬即逝。可这种心情很长，如高山大川，连绵不绝。
+
+摄影当你可以跟一个人不说话，分享片刻寂静，且不会觉得尴尬，那一刻你就会明白，你遇到了对的人。
+
+摄影你必须内心丰富，才能摆脱这些生活表面的相似。
+
+摄影人生，与其说像跳舞，不如说像摔跤，因为它要求我们立定脚跟，准备好迎接任何不期而遇的打击。
+
+插画生活是苦难的，我又划着我的断桨出发了。
+
+摄影爱意味着学会注视你自己。
+
+摄影人生需要准备的，不是昂贵的茶，而是喝茶的心情。
+
+摄影生命也许就是这样，多一分经验便少一分幻想，以实际的愉快平衡实际的痛苦。
+
+摄影获得真正自由的方法是要学会自我控制。如果情绪总是处于失控状态，就会被感情牵着鼻子走，丧失自由。所以那些精神自由，保持独立思考的人也正是擅 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/02/01/Month/ONE_202002/" title="第八十九卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20200201-2714.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第八十九卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/02/01/Month/ONE_202002/" title="第八十九卷">第八十九卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-02-01T00:00:00.000Z" title="发表于 2020-02-01 00:00:00">2020-02-01</time></span></div><div class="content">Reprinted from ONE
+摄影人有的时候真是奇怪。选择了的会后悔，放弃了的会遗憾，但是完美只能是一种理想，而不可能是一种存在。
+
+摄影不是所有人都能功成名就，我们中有些人，注定要在日常生活的点滴中寻找生命的意义。
+
+摄影最长的路也有尽头，最黑暗的夜晚也会迎接清晨。
+
+摄影要大笑，要做梦，要与众不同。人生是一场伟大的冒险。
+
+摄影灾难并不是死了两万人这样一件事，而是死了一个人这件事，发生了两万次。
+
+摄影保持纯真十分重要。自始至终不要失去开放的胸怀和童稚的热情，自然就会拥有无限可能。
+
+摄影比世人的目光还要可怕的，实际上是你自己那颗在意世人目光的心。
+
+摄影在最黑暗的那段人生，是我自己把自己拉出深渊。没有那个人，我就做那个人。
+
+摄影时代的一粒灰，落在个人头上，就是一座山。
+
+摄影相信我，上天会厚待那些勇敢的、坚强的、多情的人。
+
+摄影纵使黑夜吞噬了一切，太阳还可以重新回来。
+
+摄影人间的事，只要生机不灭，即使重遭天灾人祸，暂被阻抑，终有抬头的日子。
+
+插画死并非生的对立面，而作为生的一部分永存。
+
+摄影人是如何感受历史中那些巨大灾难的呢？又是怎样度过那些灾难的呢？无论是在灾 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/01/01/Month/ONE_202001/" title="第八十八卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20200102-2682.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第八十八卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/01/01/Month/ONE_202001/" title="第八十八卷">第八十八卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-01-01T00:00:00.000Z" title="发表于 2020-01-01 00:00:00">2020-01-01</time></span></div><div class="content">Reprinted from ONE
+摄像人总要爱着什么，活着才有意义。
+
+摄影新的一年，自由快乐。
+
+摄影这个世界上根本没有正确的选择，我们只不过是要努力奋斗，使当初的选择变得正确。
+
+摄影成熟意味着停止展示自己，并学会隐藏自己。
+
+摄影以前是以前，现在是现在。我不能选择，怎么生，怎么死；但我能决定，怎么爱，怎么活。
+
+摄影日子只能一天一天好好地过，别无他法。别烦恼明天的事。明天的烦恼明天再烦。我想开心，努力，温柔待人地过完今天一天。
+
+摄影人也许不认识人，但灵魂认识灵魂。
+
+摄影毕竟我不像饮料那样，贴着草莓味或柠檬味的标签。
+
+摄影永远努力在你的生活之上保留一片天空。
+
+摄影我从来不相信什么懒洋洋的自由，我向往的自由是通过勤奋和努力实现的更广阔的人生，那样的自由才是珍贵的、有价值的；我相信一万小时定律，我从来不相信天上掉馅饼的灵感和坐等的成就。做一个自由又自律的人，靠势必实现的决心认真地活着。
+
+摄影生活没有那么复杂，也没有特别固定的定义。该放下就放下，有时候就是这么简单。
+
+摄影真实的、永恒的、最高级的快乐，只能从三样东西中取得：工作、自我克制和爱。
+
+摄影世上有味之事，包括诗， ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2019/12/01/Month/ONE_201912/" title="第八十七卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2019/raw/master/20191209-2637.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第八十七卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/12/01/Month/ONE_201912/" title="第八十七卷">第八十七卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-12-01T00:00:00.000Z" title="发表于 2019-12-01 00:00:00">2019-12-01</time></span></div><div class="content">Reprinted from ONE
+摄影每个人或多或少都经历着两种力量的斗争，对独处的渴望和走出去的冲动。
+
+摄影罪责也许不会消失，悲哀却是会过去的。
+
+摄影人生在世，快乐和痛苦本就分不清，我只求它货真价实。
+
+插画爱自己，是终生浪漫的开始。
+
+摄影有一天，女人或许可以用她的“强”去爱，而不是用她的“弱”去爱，不是逃避自我，而是找到自我，不是自我舍弃，而是自我肯定，那时，爱情对她和对他将一样，将变成生活的源泉，而不是致命的危险。
+
+摄影再见，这是人类语言中最空洞又最丰富的信息。
+
+摄影我当然不会试图摘月，我要月亮奔我而来。
+
+摄影我只是无法明白，到底是爱艰难些，还是承受爱艰难些。
+
+摄影人生终是一场自救，别人帮不了你。但你要坚强。
+
+摄影冬天从这里夺取的，春天会交还与你。
+
+国画世上的事，认真不对，不认真更不对，执着不对，一切视作空也不对，平平常常，自自然然。
+
+摄影毕竟一生热爱回头太难，苦和甜都往心里藏吧。
+
+插画不要虚掷你的黄金时代，不要去倾听枯燥乏味的东西，不要设法挽留无望的失败，不要把你的生命献给无知、平庸和低俗。
+
+摄影最好丢弃天真，保持骄傲，学会冷静。通过或多或少的努力， ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2019/11/01/Month/ONE_201911/" title="第八十六卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2019/raw/master/20191101-2618.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第八十六卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/11/01/Month/ONE_201911/" title="第八十六卷">第八十六卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-11-01T00:00:00.000Z" title="发表于 2019-11-01 00:00:00">2019-11-01</time></span></div><div class="content">Reprinted from ONE
+摄影当改变命运的时刻降临，犹豫就会败北。
+
+插画爱情的悲剧就在于冷漠。
+
+摄影一般来说，外在事件和我们的目标就像两股方向相反的力，这两股力之间形成的对角线，就是我们生活的轨迹。
+
+摄影你太习惯这个世界了，才会对任何事情都不感到惊奇。
+
+摄影我敬佩简单的快乐，那是复杂的最后避难所。
+
+摄影所谓青春就是尚未得到某种东西的状态，就是渴望的状态，憧憬的状态，也是具有可能性的状态。
+
+摄影别慌，月亮也正在大海某处迷茫。
+
+插画语言和文字真的是不可执取的东西，当一句话说出来或者写下来，它就不是你的了，你必须允许别人任意解读，甚至误读。所以我最想说的话，其实在我开口的一刹那就已经说完。
+
+摄影真爱无坦途。
+
+摄影在我荒瘠的土地上你是最后的玫瑰。
+
+插画“你有困难的时候为什么没有向他求助呢？” “因为他不会拒绝。”
+
+摄影越不肯努力便越自怜。
+
+摄影有了物质，那是生存。有了精神，那才是生活。
+
+摄影自律是最大的自由。
+
+摄影面对复杂，保持欢喜。
+
+摄影生命的意义，在于人与人的相互照亮。
+
+摄影其实人生也没有什么道理可讲，但是我们不必丧气，还是要期待，人生有奇遇。
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2019/10/01/Month/ONE_201910/" title="第八十五卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2019/raw/master/20191001-2586.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第八十五卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/10/01/Month/ONE_201910/" title="第八十五卷">第八十五卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-10-01T00:00:00.000Z" title="发表于 2019-10-01 00:00:00">2019-10-01</time></span></div><div class="content">Reprinted from ONE
+插画能梦见你是我的过人之处。
+
+摄影根椐平均数定律，我们绝大部分人注定平凡。这样说并不能带来任何慰藉，但真的，中等就好，生命平庸，真理平常，道德平凡。
+
+插画如果一个人必须完成一件自己不喜欢的事，最好的办法就是尽快做好，然后结束。
+
+插画大部分的恐惧与懒惰有关，这句我深以为然。
+
+插画除了被匕首捅伤或是被枪击中这类身体上的伤害外，唯一能伤害到你的只有你在意的人。
+
+摄影或许美化灵魂有不少途径，但我想，阅读是其中易走的，不昂贵的，不须求助他人的捷径。
+
+插画江涵秋影雁初飞，与客携壶上翠微。
+
+插画当没有任何一个人信任你的时候，沉默和坚持就是最好的反击和证明。
+
+摄影路过我们生命的每个人，都参与了我们，并最终构成了我们本身。
+
+摄影欢迎来到无法随心所欲的爱与欲望的世界。
+
+插画她美丽得恍若梦幻。那是一种此前见所未见甚至想所未想的美丽。一切如宇宙一般膨胀开来，同时又全部凝缩在厚实的冰河里。一切被夸张得近乎傲慢，同时又全部被削落殆尽。
+
+摄影我们所爱的，常常不是一个人，而是爱情本身。那天晚上，月光才是你的真正情人。
+
+摄影人的本能是追逐从他身边飞走的东西， ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2019/09/01/Month/ONE_201909/" title="第八十四卷">     <img class="post_bg" data-lazy-src="https://gitee.com/lishisan/one2019/raw/master/20190901-2555.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第八十四卷"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/09/01/Month/ONE_201909/" title="第八十四卷">第八十四卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-09-01T00:00:00.000Z" title="发表于 2019-09-01 00:00:00">2019-09-01</time></span></div><div class="content">Reprinted from ONE
+摄影世界上任何书籍都不能带给你好运，但是它们能让你悄悄成为你自己。
+
+插画我深怕自己本非美玉，故而不敢加以刻苦琢磨，却又半信自己是块美玉，故又不肯庸庸碌碌，与瓦砾为伍。
+
+摄影所谓自律，是以积极而主动的态度，去解决人生痛苦的重要原则，主要包括四个方面：推迟满足感、承担责任、尊重事实、保持平衡。
+
+插画眼睛是爱情的器官，其主要功能是顾盼和失眠。
+
+摄影人生就像一盒巧克力，你永远不知道下一块会是什么味道。
+
+摄影其实我们早是旧识，在前来赴约的路上耽误了时间现在才相遇。
+
+摄影因为离开你的人越来越多，所以留下来的人就越来越重要。
+
+插画人很少为自己而活，不是为所爱的人，就是为所恨的人。
+
+插画明确的爱，直接的厌恶，真诚的喜欢。站在太阳下的坦荡，大声无愧地称赞自己。
+
+摄影谁都会犯错误，所以人们才会在铅笔的另一头装上橡皮。
+
+插画我们总要一次次粉碎自己， 投身新天地， 重新建立自己的喜欢， 重新建立自己的幸福。
+
+摄影现在不是去想缺少什么的时候，该想一想凭现有的东西你能做什么。
+
+摄影但愿人长久，千里共婵娟。
+
+摄影当我真正开始爱自己，我才认识到，所有的痛 ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Acender</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives"><div class="headline">文章</div><div class="length_num">104</div></a></div><div class="card-info-data-item is-center">      <a href="/tags"><div class="headline">标签</div><div class="length_num">13</div></a></div><div class="card-info-data-item is-center"><a href="/categories"><div class="headline">分类</div><div class="length_num">2</div></a></div></div><a class="button--animated" id="card-info-btn" href="https://github.com"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://weibo.com/p/1005056067259311" target="_blank" title=""><i class="fab fa-weibo"></i></a><a class="social-icon" href="https://www.facebook.com/profile.php?id=100016946919604" target="_blank" title=""><i class="fab fa-facebook-f"></i></a><a class="social-icon" href="https://twitter.com/_Acender_" target="_blank" title=""><i class="fab fa-twitter"></i></a><a class="social-icon" href="https://www.instagram.com/_lishisan_/" target="_blank" title=""><i class="fab fa-instagram"></i></a><a class="social-icon" href="https://github.com" target="_blank" title=""><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liqijia1997@gmail.com" target="_blank" title=""><i class="fa fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title=""><i class="fa fa-rss"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到这里</div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-recent-item"><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/12/01/Month/ONE_202012/" title="第九十九卷"><img class="aside-post-bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20201201-3020.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十九卷"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/12/01/Month/ONE_202012/" title="第九十九卷">第九十九卷</a><time class="aside-post_meta post-meta-date" datetime="2020-12-01T00:00:00.000Z" title="发表于 2020-12-01 00:00:00">2020-12-01</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/11/01/Month/ONE_202011/" title="第九十八卷"><img class="aside-post-bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20201101-2990.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十八卷"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/11/01/Month/ONE_202011/" title="第九十八卷">第九十八卷</a><time class="aside-post_meta post-meta-date" datetime="2020-11-01T00:00:00.000Z" title="发表于 2020-11-01 00:00:00">2020-11-01</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/10/01/Month/ONE_202010/" title="第九十七卷"><img class="aside-post-bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20201001-2959.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十七卷"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/10/01/Month/ONE_202010/" title="第九十七卷">第九十七卷</a><time class="aside-post_meta post-meta-date" datetime="2020-10-01T00:00:00.000Z" title="发表于 2020-10-01 00:00:00">2020-10-01</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/09/01/Month/ONE_202009/" title="第九十六卷"><img class="aside-post-bg" data-lazy-src="https://gitee.com/lishisan/one2020/raw/master/20200901-2928.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第九十六卷"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/09/01/Month/ONE_202009/" title="第九十六卷">第九十六卷</a><time class="aside-post_meta post-meta-date" datetime="2020-09-01T00:00:00.000Z" title="发表于 2020-09-01 00:00:00">2020-09-01</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/08/28/DB/20200828/" title="SQL与数据库优化"><img class="aside-post-bg" data-lazy-src="/img/default_cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL与数据库优化"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/08/28/DB/20200828/" title="SQL与数据库优化">SQL与数据库优化</a><time class="aside-post_meta post-meta-date" datetime="2020-08-28T12:17:03.000Z" title="发表于 2020-08-28 12:17:03">2020-08-28</time></div></div></div></div></div><div class="card-widget card-categories"><div class="card-content"><div class="item-headline"><i class="fas fa-folder-open"></i><span>分类</span></div><ul class="card-category-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/"><span class="card-category-list-name">学习记录</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8E%A8%E8%8D%90/"><span class="card-category-list-name">推荐</span><span class="card-category-list-count">1</span></a></li>
+                       
+            </ul></div></div><div class="card-widget card-tags"><div class="card-content"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Apache/" style="font-size: 16px; color: #999">Apache</a> <a href="/tags/Flink/" style="font-size: 19px; color: #99a1ac">Flink</a> <a href="/tags/MySQL/" style="font-size: 16px; color: #999">MySQL</a> <a href="/tags/ONE/" style="font-size: 22px; color: #99a9bf">ONE</a> <a href="/tags/Spark/" style="font-size: 16px; color: #999">Spark</a> <a href="/tags/Zeppelin/" style="font-size: 16px; color: #999">Zeppelin</a> <a href="/tags/%E4%B8%80%E4%B8%AA/" style="font-size: 22px; color: #99a9bf">一个</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 16px; color: #999">优化</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 16px; color: #999">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 16px; color: #999">数据库</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 16px; color: #999">机器学习</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 16px; color: #999">架构</a> <a href="/tags/%E8%BD%AF%E4%BB%B6/" style="font-size: 16px; color: #999">软件</a></div></div></div><div class="card-widget card-archives"><div class="card-content"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/12/"><span class="card-archive-list-date">十二月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/11/"><span class="card-archive-list-date">十一月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/10/"><span class="card-archive-list-date">十月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/09/"><span class="card-archive-list-date">九月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/08/"><span class="card-archive-list-date">八月 2020</span><span class="card-archive-list-count">6</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/07/"><span class="card-archive-list-date">七月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/06/"><span class="card-archive-list-date">六月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/05/"><span class="card-archive-list-date">五月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item more is-center"><a class="card-archive-list-link-more" href="/archives">
+              <span>查看更多</span><i class="fas fa-angle-right"  ></i></a></li></ul></div></div><div class="card-widget card-webinfo"><div class="card-content"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="webinfo-article-name">文章数目 :</div><div class="webinfo-article-count">104</div></div><div class="webinfo-item"><div class="webinfo-site-wordcount-name">本站总字数 :</div><div class="webinfo-site-wordcount">167.9k</div></div><div class="webinfo-item">      <div class="webinfo-site-uv-name">本站访客数 :</div><div class="webinfo-site-uv-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="webinfo-site-name">本站总访问量 :</div><div class="webinfo-site-pv-count" id="busuanzi_value_site_pv"></div></div></div></div></div></div></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By Acender</div><div class="footer_custom_text">-The World is Yours-</div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>function subtitleType () {
+  $.getScript('https://sdk.jinrishici.com/v2/browser/jinrishici.js',function () {
+    jinrishici.load(function (result) {
+      if (true) {
+        var sub = "".length == 0 ? new Array() : "".split(',')
+        var content = result.data.content
+        var both = sub.unshift(content)
+        var typed = new Typed('#subtitle', {
+          strings: sub,
+          startDelay: 300,
+          typeSpeed: 150,
+          loop: true,
+          backSpeed: 50,
+        })
+      } else {
+        document.getElementById('subtitle').innerHTML = result.data.content
+      }
+    })
+  })
+}
+
+if (true) {
+  if (typeof Typed === 'function') subtitleType()
+  else $.getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js', subtitleType)
+} else {
+  subtitleType()
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks"></canvas><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="/js/third-party/fireworks.js"></script></div></body></html>

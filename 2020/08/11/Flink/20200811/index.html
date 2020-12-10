@@ -1,0 +1,264 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>微博基于 Flink 的机器学习实践 | Acender</title><meta name="description" content="摘要：微博作为国内比较主流的社交媒体平台，目前拥有2.22亿日活用户和5.16亿月活用户。如何为用户实时推荐优质内容，背后离不开微博的大规模机器学习平台。本文由微博机器学习研发中心高级算法工程师于茜老师分享，主要内容包含以下四部分：   关于微博 微博机器学习平台 ( WML ) 总览 Flink在WML中的应用 使用Flink的下一步计划  关于微博 微博 2008 年上线，是目前国内比较主流"><meta name="keywords" content="Flink,机器学习,架构"><meta name="author" content="Acender"><meta name="copyright" content="Acender"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://github.com/2020/08/11/Flink/20200811/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//ta.qq.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="微博基于 Flink 的机器学习实践"><meta property="og:url" content="https://github.com/2020/08/11/Flink/20200811/"><meta property="og:site_name" content="Acender"><meta property="og:description" content="摘要：微博作为国内比较主流的社交媒体平台，目前拥有2.22亿日活用户和5.16亿月活用户。如何为用户实时推荐优质内容，背后离不开微博的大规模机器学习平台。本文由微博机器学习研发中心高级算法工程师于茜老师分享，主要内容包含以下四部分：   关于微博 微博机器学习平台 ( WML ) 总览 Flink在WML中的应用 使用Flink的下一步计划  关于微博 微博 2008 年上线，是目前国内比较主流"><meta property="og:image" content="https://github.com/img/Apache-Flink.png"><meta property="article:published_time" content="2020-08-11T12:17:03.000Z"><meta property="article:modified_time" content="2020-12-10T07:28:11.823Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = '1'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?69bc6dcd5c1d4ed9f296ca024a2db5af";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=1778191552"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '1778191552');
+</script><script src="https://tajs.qq.com/stats?sId=66510289" charset="UTF-8" data-pjax="data-pjax"></script><link rel="stylesheet" href="/STZhongsong,YouYuan"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: false,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"键将本页加入书签"},"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#121212","bgDark":"#121212","position":"bottom-center"},
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-12-10 07:28:11'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/footer.css"><meta name="generator" content="Hexo 5.0.0"><link rel="alternate" href="/atom.xml" title="Acender" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">104</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">13</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 书架</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa fa-images"></i><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-coffee"></i><span> 留言</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%BE%AE%E5%8D%9A"><span class="toc-number">1.</span> <span class="toc-text">关于微博</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BE%AE%E5%8D%9A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0-WML-%E6%80%BB%E8%A7%88"><span class="toc-number">2.</span> <span class="toc-text">微博机器学习平台 ( WML ) 总览</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E8%A7%88"><span class="toc-number">2.1.</span> <span class="toc-text">总览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">开发模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CTR-%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.3.</span> <span class="toc-text">CTR 模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-%E5%9C%A8-WML-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">Flink 在 WML 中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%A7%88"><span class="toc-number">3.1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.2.</span> <span class="toc-text">样本服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%B5%81-Join"><span class="toc-number">3.3.</span> <span class="toc-text">多流 Join</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%AA%92%E4%BD%93%E7%89%B9%E5%BE%81%E7%94%9F%E6%88%90"><span class="toc-number">3.4.</span> <span class="toc-text">多媒体特征生成</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Flink-%E7%9A%84%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%AE%A1%E5%88%92"><span class="toc-number">4.</span> <span class="toc-text">使用 Flink 的下一步计划</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93"><span class="toc-number">4.1.</span> <span class="toc-text">实时数仓</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E-Flink-%E7%9A%84-DL"><span class="toc-number">4.2.</span> <span class="toc-text">基于 Flink 的 DL</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(/img/Apache-Flink.png)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">Acender</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 书架</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa fa-images"></i><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-coffee"></i><span> 留言</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">微博基于 Flink 的机器学习实践</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-11T12:17:03.000Z" title="发表于 2020-08-11 12:17:03">2020-08-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-12-10T07:28:11.823Z" title="更新于 2020-12-10 07:28:11">2020-12-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">学习记录</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><blockquote>
+<p><strong>摘要：</strong>微博作为国内比较主流的社交媒体平台，目前拥有2.22亿日活用户和5.16亿月活用户。如何为用户实时推荐优质内容，背后离不开微博的大规模机器学习平台。本文由微博机器学习研发中心高级算法工程师于茜老师分享，主要内容包含以下四部分：</p>
+</blockquote>
+<ol>
+<li>关于微博</li>
+<li>微博机器学习平台 ( WML ) 总览</li>
+<li>Flink在WML中的应用</li>
+<li>使用Flink的下一步计划</li>
+</ol>
+<h1 id="关于微博"><a href="#关于微博" class="headerlink" title="关于微博"></a>关于微博</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180806.png" alt="微信图片_20200811180806"></p>
+<p>微博 2008 年上线，是目前国内比较主流的社交媒体平台，拥有 2.22 亿日活用户和 5.16 亿月活用户，为用户提供在线创作、分享和发现优质内容的服务；目前微博的大规模机器学习平台可以支持千亿参数和百万 QPS。</p>
+<h1 id="微博机器学习平台-WML-总览"><a href="#微博机器学习平台-WML-总览" class="headerlink" title="微博机器学习平台 ( WML ) 总览"></a>微博机器学习平台 ( WML ) 总览</h1><p>接下来介绍一下微博机器学习平台，即 WML 的总览；机器学习平台 ( WML ) 为 CTR、多媒体等各类机器学习和深度学习算法提供从样本处理、模型训练、服务部署到模型预估的一站式服务。</p>
+<h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180828.png" alt="微信图片_20200811180828"></p>
+<p>上方是 WML 的一个整体架构图，共分为六层，从下至上依次介绍：</p>
+<ul>
+<li>集群层：包含离线计算集群、在线计算集群和高性能计算集群；</li>
+<li>调度层：包含自研的 WeiBox ( 提供使用通用的接口将任务提交到不同集群的能力 )、Weiflow ( 提供将任务间的依赖关系处理好、组成 DAG 工作流的能力 )，以及常见的调度引擎 Yarn 和 K8s；</li>
+<li>计算平台层：包含自研的 WeiLearn ( 提供给用户在该平台做业务开发的能力 )，以及 Hadoop/Spark 离线计算平台、Flink/Storm 在线计算平台和 Tensorflow 机器学习平台；</li>
+<li>模型训练层：目前支持 LR、GBDT、FM/FFM、CF/MF、DNN/RNN 等主流的算法；</li>
+<li>在线推理层：包含自研的 WeiServing和WeiPS；</li>
+<li>业务应用层：主要应用场景是特征生成、样本服务、在线训练和在线推理；</li>
+<li>右边是自定义的一些概念，样本库、模型库、服务库以及两个任务提交方式WeiClient ( CLI 方式提交 )、WAIC UI ( 界面操作 )。</li>
+</ul>
+<h2 id="开发模式"><a href="#开发模式" class="headerlink" title="开发模式"></a>开发模式</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180832.png" alt="微信图片_20200811180832"></p>
+<p>接下来介绍一下开发模式，有两层 DAG 的设计：</p>
+<ul>
+<li>内层，WeiLearn 层里面可以重写离线的 Input、Process 和 Output 方法以及实时的 Source、Process 和 Sink 方法，用户自己开发一个 UDF 来实现自己的业务逻辑；内层的每一个 DAG 都会组成一个 Task。</li>
+<li>外层，即第二层 DAG 层，WeiFlow 层里面将 WeiLearn 中产生的 Task 的依赖关系组成一个集群内或者跨集群的 WorkFlow，然后运行计算。</li>
+</ul>
+<h2 id="CTR-模型"><a href="#CTR-模型" class="headerlink" title="CTR 模型"></a>CTR 模型</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180836.png" alt="微信图片_20200811180836"></p>
+<p>介绍一下 CTR 模型在微博迭代的情况，经过几年的研究和探索，目前支撑的参数规模达千亿级，服务峰值达百万 QPS，模型更新的周期大概在 10 分钟左右；现在是 Weilearn6.0 版本，可以看到 WeiLearn 在不断完善更新自己的算法：</p>
+<ul>
+<li>1.0 版本仅支持 LR 离线学习</li>
+<li>2.0 版本支持 LR/GBDT/LR+GBDT 离线学习</li>
+<li>3.0 版本支持 LR/GBDT/LR+GBDT 离线学习以及 Wide&amp;Deep 的深度学习</li>
+<li>4.0 版本支持 LR/GBDTLR+GBDT/FM/MF 离线学习以及 Wide&amp;Deep 的深度学习</li>
+<li>5.0 版本支持 Online FM/FFM 在线学习，LR/GBDT/LR+GBDT/FM/MF 离线学习以及 Wide&amp;Deep/DeepFM/DSSM 的深度学习</li>
+<li>6.0 版本更新了 Online DNN 模型，加强在线机器学习模型的表达能力</li>
+</ul>
+<h1 id="Flink-在-WML-中的应用"><a href="#Flink-在-WML-中的应用" class="headerlink" title="Flink 在 WML 中的应用"></a>Flink 在 WML 中的应用</h1><p>下面介绍 Flink 在微博机器学习平台 WML 中的架构</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180840.png" alt="微信图片_20200811180840"></p>
+<p>上图为实时计算平台的整体情况，接下来详细介绍一下各模块：</p>
+<ul>
+<li>基础架构层：包含 Storm 集群、Flink 集群、Flume 以及用于监控系统运行的 Grafana。</li>
+<li>计算层：主要是对 Pig 和 Flink 的进一步封装，包含 WeiPig + WeiStream 和 WeiLearn + WeiFlink；左侧为实时数据源，包含实时消息队列、Redis、Kafka；一些历史数据会存到右侧的 HDFS 中。</li>
+<li>应用层：目前这套平台主要应用于多媒体特征生成、内容去重、数据同步、实时特征生成、样本服务以及在线训练。</li>
+<li>业务层：支撑了目前微博主要的几个业务，包含热门微博、关系流、视频推荐、内容监控和图片推荐。</li>
+</ul>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180843.png" alt="微信图片_20200811180843"></p>
+<p>接下来看一下 Flink 在 ETL 的 Pipeline 中的概览：之前是有两个 Pipeline，一个为在线的，以前是使用 Storm 进行的处理，目前正在往 Flink 迁移，两套现在处于并行状态，处理流程是从消息队列中获取数据进行处理，然后给到在线训练模块 ( Flink 和 Spark Streaming 并行 )，最后提供模型服务给推荐系统调用；一个为离线的，和在线类似，首先写入到 HDFS 交给 Hive 或 Spark 进行处理，再次落到 HDFS 中交给离线训练使用，最后提供模型服务给推荐系统调用。因为有两类 ETL 的 Pipeline，使用不同的框架，需要维护两套代码，维护成本较高。</p>
+<p>目前做的就是将两套融合成一套，进行批流统一的处理，此处可能会用到 FlinkSQL，然后将 ETL 后的数据输出到实时消息队列或者 HDFS 中，交给在线和离线模型训练，最后提供模型服务给推荐系统调用。</p>
+<h2 id="样本服务"><a href="#样本服务" class="headerlink" title="样本服务"></a>样本服务</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180847.png" alt="微信图片_20200811180847"></p>
+<p>介绍一下样本生成服务，上图为该服务的整体架构图，包含样本数据的处理和计算等，除了一些生成的离线和实时数据外，还需要一些已经生成好的特征的引用，通过普通计算、多流 Join、深度学习等处理方式生成样本，最后存储到样本库中供模型训练来调用。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180850.png" alt="微信图片_20200811180850"></p>
+<p>这个是样本服务任务提交的方式，可以通过之前提到的 WeiClient 命令行方式提交，也可以通过 WAIC UI 方式指定样本 ID 以及 UDF 的 class name 和要拼接的特征 ID，通过一种统一的方式将作业提交到集群上；之后是通过 Twinkle 或 VVP 的方式提交到 Flink 集群，然后会对作业状态进行管理，通过 Grafana 进行监控和报警，将历史作业信息存储到 HDFS 中。</p>
+<h2 id="多流-Join"><a href="#多流-Join" class="headerlink" title="多流 Join"></a>多流 Join</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180853.png" alt="微信图片_20200811180853"></p>
+<p>这是微博目前的一个主流场景，多数据流 Join 场景 ( 大部分是大于等于 3 )：有 N 个数据源，通过过滤和映射的处理后按照 Key 进行分发，在 Joining Window 中进行 Join 后 ( 此处后面会详细讲 )，会再进行一次过滤和映射以及添加特征，最后输出到样本库中。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180856.png" alt="微信图片_20200811180856"></p>
+<p>接下来看一下刚刚讲到的拼接窗口的实现方式，这是和业务比较相关的，对于 CTR 场景来说日志有很多种 ( 多个行为日志 )，但是到达的时间并不完全一致，比如点击这种行为日志可能会比曝光日志到的晚一些；这样就会需要一个时间窗口，以 10 分钟为例，如果某种日志先到了，就会将对应的 Key 和 Value 存储到 State 中，状态存储这块是基于 RocksDB 和 HDFS 做的；经过这个十分钟窗口之后，拼接好的样本数据会输到实时流中；此处基于 Flink 做了一些优化：</p>
+<ul>
+<li>因为窗口是 10 分钟的，但是如果 10 分钟内日志数据已经全部到达，就不同等到 10 分钟窗口结束后再输出去；所以自定义了样本 Trigger 触发机制，样本拼接成功后就可以立即输出，这样可以减少一些时延</li>
+<li>样本补偿 PU loss；此处是基于 Twitter 在 2019 年发的一篇论文的实现方式，就是拿到正样本之后，首先对正样本做一个梯度下降的处理，另外可能之前有 False Negative 的样本已经发送出去了，那就需要之前的样本进行补偿，所以需要对该样本的负样本做一个反向的梯度下降</li>
+<li>另外在 RocksDB 做状态存储这部分，引用了 Gemini 与 RocksDB 作对比，Gemini 的 IO 性能更好一些</li>
+<li>拼接窗口时长的控制是和业务场景比较相关的，日志到达的时间和具体的业务场景是有关系的，所以需要权衡时间窗口设置多长时间才能满足拼接成功率的预期，这块需要大量的离线计算和 A/B Test 来共同决定。</li>
+</ul>
+<h2 id="多媒体特征生成"><a href="#多媒体特征生成" class="headerlink" title="多媒体特征生成"></a>多媒体特征生成</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180859.png" alt="微信图片_20200811180859"></p>
+<p>介绍一下 Flink 在多媒体特征生成场景的应用，此处主要是依赖离线计算的深度学习模型，因此整体的模型训练走的是离线的 Pipeline，将数据在离线的 GPU 集群进行分布式的模型训练，然后将模型部署到 GPU 上面供在线推理的时候调用；在线推理模块接收到图片流、文本流和视频流这些实时数据之后，首先会通过 RPC 调用 GPU 上的模型，然后将多媒体特征结果写入到数据中台，由业务方去读取结果来使用，因为这块是一个实时的任务作业，服务稳定性需要一定的保障 ( 4 个 9 的成功率、秒级延迟、配置化开发模式 )，下面会对服务保障做详细介绍。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180902.png" alt="微信图片_20200811180902"></p>
+<p>针对实时任务的服务保障做了如下的工作：</p>
+<ul>
+<li>全链路监控报警 &amp;Case 追踪，针对模型服务到 RPC 的情况、模型关键指标以及样本情况整体是有一个全流程的监控</li>
+<li>设置消息机制是 At least once，每条消息至少要被处理一次，这样可以保障每条数据结果都能写到特征工程中</li>
+<li>任何一个部分出现问题都会实现自动重启</li>
+<li>重启时可以从 Checkpoints 中恢复数据和 State，可以避免一些重复计算，也是为了减少一些延时</li>
+<li>所有实时任务都会起一个重试的任务，这样在主流程中写入失败，会再次写入到重试队列中再进行一次重试的写入，这样保障数据会被计算两次；如果最终还是写入失败，就会记录到对账离线系统中，这样可以看到哪些数据是写入失败的，可以手动恢复一下。</li>
+</ul>
+<h1 id="使用-Flink-的下一步计划"><a href="#使用-Flink-的下一步计划" class="headerlink" title="使用 Flink 的下一步计划"></a>使用 Flink 的下一步计划</h1><p>最后分享一下使用 Fllink 的下一步计划：</p>
+<h2 id="实时数仓"><a href="#实时数仓" class="headerlink" title="实时数仓"></a>实时数仓</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180907.png" alt="微信图片_20200811180907"></p>
+<p>目前已经通过 Flink SQL 的方式实现了开发，但是实时和离线表的注册还有元数据存储是有一定差异的，希望可以抽象出一层 API 用统一的方式来进行实时和离线表的注册以及元数据的存储。</p>
+<h2 id="基于-Flink-的-DL"><a href="#基于-Flink-的-DL" class="headerlink" title="基于 Flink 的 DL"></a>基于 Flink 的 DL</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/lishisan/Images/raw/master/Flink/%E5%BE%AE%E5%8D%9A%E5%9F%BA%E4%BA%8EFlink%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200811180910.png" alt="微信图片_20200811180910"></p>
+<p>我们希望可以将离线的深度学习完全迁移到在线深度学习来做，这样的话就需要用到 TensorFlow on Flink，这样就可以保证不管是模型训练还是在线推理都可以使用同样一套框架去完成，这样就需要把离线训练的全量模型也可以通过实时样本进行增量训练的一些校正，后面的步骤和之前基本上是保持一致的，这样就可以将离线深度学习的这条 Pipeline 优化一些。</p>
+<blockquote>
+<p>本文章转载于 <a href="javascript:void(0);">Flink 中文社区</a> 原作者 于茜 </p>
+</blockquote>
+<blockquote>
+<p>本文章仅用于个人记录学习 转载请注明原作者</p>
+</blockquote>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Acender</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://github.com/2020/08/11/Flink/20200811/">https://github.com/2020/08/11/Flink/20200811/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://github.com" target="_blank">Acender</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Flink/">Flink</a><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="post-meta__tags" href="/tags/%E6%9E%B6%E6%9E%84/">架构</a></div><div class="post_share"><div class="social-share" data-image="/img/Apache-Flink.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/08/19/Spark/spark1/"><img class="prev-cover" data-lazy-src="/img/spark-logo.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Apache Spark 3.0：全新功能知多少</div></div></a></div><div class="next-post pull-right"><a href="/2020/08/07/Flink/20200807/"><img class="next-cover" data-lazy-src="/img/Apache-Flink.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Flink Sql on Zeppelin之Checkpoint应用</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/08/07/Flink/20200807/" title="Flink Sql on Zeppelin之Checkpoint应用"><img class="relatedPosts_cover" data-lazy-src="/img/Apache-Flink.png"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-07</div><div class="relatedPosts_title">Flink Sql on Zeppelin之Checkpoint应用</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div class="comment-switch"><span class="first-comment">Valine</span><label><input id="switch-comments-btn" type="checkbox"/><span class="slider"></span></label><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By Acender</div><div class="footer_custom_text">-The World is Yours-</div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    window.valine = new Valine({
+      el: '#vcomment',
+      appId: 'hTTFRyiofXyJITsWFoz3cNhf-MdYXbMMI',
+      appKey: 'I7DHK7OpdMWAhqcOsBBxdmEt',
+      placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+    });
+    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://github.com/2020/08/11/Flink/20200811/'
+    this.page.identifier = '2020/08/11/Flink/20200811/'
+    this.page.title = '微博基于 Flink 的机器学习实践'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://lishisan.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks"></canvas><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="/js/third-party/fireworks.js"></script></div></body></html>
